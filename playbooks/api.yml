@@ -1,0 +1,17 @@
+---
+- name: setup the api service
+  hosts: linux
+  remote_user: root
+
+  tasks:
+  - name: pull the api image
+    docker_image:
+      name: registry.hub.docker.com/library/hello-world
+      source: pull
+      state: present
+    
+  - name: run a api container
+    docker_container:
+      name: api_container1
+      state: present
+      image: hello-world:latest
