@@ -8,8 +8,6 @@
     yum:
       name: epel-release
       state: present
-    
-    shell:
 
 - name: install the webserver
   hosts: linux
