@@ -11,14 +11,14 @@ terraform {
 
 provider "aws" {
   profile     = "default"
-  region      = "us-east-1"
+  region      = var.aws_region
   max_retries = 1
 
 }
 
 resource "aws_key_pair" "access_key" {
-  key_name   = "deploy-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZN1DH2v5vfMljWidtzG8Nt5pDiO5PwCKrDMGUAv3Jh/WRmoEnQdrLxRKC8jQ+g4EwPs37ECThDptMV9HfLE7sy7JDY86pNt1ttjwpsUFBjreP6GjM7RZbkAoP31W4a3hc3LYb6lTTiy33/Bje7sN1CKXBw3lq20/S0FguG8XSy+/PXz1HFYiglgg6KzVAfI8B+v0E9wokwIk7KDa54Bs7HJuCjACCjF9MEnGmOAjqzE+Kr1ZQT3ruPpDInUWwOwLyvrWLm9R5pS8RZBBWRsD2upjFYGQ0x5eUebWTVTm6UMsWrFkNOaaWT1Tbbfp861JJKKydN8U4NtTqAUaVSIYp rsa-key-20211017"
+  key_name   = "deploy_key"
+  public_key = var.deploy_key_public_key
 }
 
 resource "aws_vpc" "app_vpc" {
@@ -33,7 +33,7 @@ resource "aws_vpc" "app_vpc" {
 resource "aws_subnet" "app_private_subnet" {
   vpc_id            = aws_vpc.app_vpc.id
   cidr_block        = "192.168.20.0/24"
-  availability_zone = "us-east-1e"
+  availability_zone = "${var.aws_region}e"
 
   tags = {
     Name = "app_private_subnet"
@@ -42,7 +42,7 @@ resource "aws_subnet" "app_private_subnet" {
 resource "aws_subnet" "app_public_subnet" {
   vpc_id            = aws_vpc.app_vpc.id
   cidr_block        = "192.168.10.0/24"
-  availability_zone = "us-east-1e"
+  availability_zone = "${var.aws_region}e"
 
   tags = {
     Name = "app_public_subnet"
@@ -52,16 +52,16 @@ resource "aws_subnet" "app_public_subnet" {
 
 # Network Interfaces
 resource "aws_network_interface" "bridge-nic" {
-  subnet_id = aws_subnet.app_private_subnet.id
-
+  subnet_id       = aws_subnet.app_private_subnet.id
+  security_groups = [aws_security_group.all_internal_allow.id]
   tags = {
     Name = "primary_network_interface"
   }
 }
 
 resource "aws_network_interface" "node1-nic" {
-  subnet_id = aws_subnet.app_public_subnet.id
-
+  subnet_id       = aws_subnet.app_public_subnet.id
+  security_groups = [aws_security_group.all_internal_allow.id, aws_security_group.inbound_all_http_allow.id]
   tags = {
     Name = "primary_network_interface"
   }
@@ -69,9 +69,10 @@ resource "aws_network_interface" "node1-nic" {
 
 # EC2 Instances
 resource "aws_instance" "bridge" {
-  ami                  = "ami-02e136e904f3da870" # us-east-1 am2
+  ami                  = var.linux_ami
   instance_type        = "t2.micro"
   iam_instance_profile = "AmazonSSMRoleForInstancesQuickSetup"
+
   network_interface {
     network_interface_id = aws_network_interface.bridge-nic.id
     device_index         = 0
@@ -94,8 +95,8 @@ resource "aws_instance" "bridge" {
 }
 
 resource "aws_instance" "node1" {
-  ami           = "ami-02e136e904f3da870" # us-east-1 am2
-  instance_type = "t2.micro"
+  ami           = var.linux_ami
+  instance_type = var.node_instance_type
   key_name      = aws_key_pair.access_key.key_name
   network_interface {
     network_interface_id = aws_network_interface.node1-nic.id
@@ -146,7 +147,7 @@ resource "aws_nat_gateway" "private_subnet_nat" {
   depends_on = [aws_internet_gateway.app_gw]
 }
 
-# route tables
+# Route tables
 resource "aws_route_table" "default_igw_route_table" {
   vpc_id = aws_vpc.app_vpc.id
 
@@ -182,4 +183,59 @@ resource "aws_route_table_association" "private_nat_association" {
 resource "aws_route_table_association" "public_igw_association" {
   subnet_id      = aws_subnet.app_public_subnet.id
   route_table_id = aws_route_table.default_igw_route_table.id
+}
+
+# Security Group
+resource "aws_security_group" "inbound_all_http_allow" {
+  name = "inbound_all_http_allow"
+
+  ingress {
+    description = "Allow all HTTP traffic"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  vpc_id = aws_vpc.app_vpc.id
+
+  tags = {
+    Name = "inbound_all_http_allow"
+  }
+}
+
+resource "aws_security_group" "all_internal_allow" {
+  name = "all_internal_allow"
+
+  ingress {
+    description = "Allow all internal traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [aws_vpc.app_vpc.cidr_block]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  vpc_id = aws_vpc.app_vpc.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = {
+    Name = "all_internal_allow"
+  }
 }
