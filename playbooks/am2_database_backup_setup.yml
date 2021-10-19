@@ -17,7 +17,7 @@
     pip:
       name: PyMySQL
       state: present
-      
+
   - name: creata a dummy database
     mysql_db:
       name: "{{ database_name }}"
@@ -39,5 +39,5 @@
   - name: schedule database backup
     cron:
       name: backup all mysql databases
-      special_time: daliy      
+      special_time: daily      
       job: "mysqldump -u {{ database_user }} --default-character-set=latin1 -p {{ database_name }}"
