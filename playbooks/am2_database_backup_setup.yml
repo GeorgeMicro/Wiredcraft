@@ -13,6 +13,11 @@
       pkg: mariadb
       state: present
 
+  - name: install PyMySQL
+    pip:
+      name: PyMySQL
+      state: present
+      
   - name: creata a dummy database
     mysql_db:
       name: "{{ database_name }}"
