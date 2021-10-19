@@ -23,7 +23,7 @@
   - name: Install docker-py with pip3
     pip:
       name: docker-py
-      executable: /usr/bin/pip3
+      # executable: /usr/bin/pip3
       state: present
 
   - name: Populate service facts
