@@ -38,6 +38,6 @@
   
   - name: schedule database backup
     cron:
-      name: backup all mysql databases
+      name: backup the dummy mysql databases
       special_time: daily      
-      job: "mysqldump -u {{ database_user }} --default-character-set=latin1 -p {{ database_name }}"
+      job: "mysqldump -u {{ database_user }} --default-character-set=latin1 -p {{ database_name }} > /var/database_backups/database_backup.sql"
