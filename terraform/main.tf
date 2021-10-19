@@ -239,3 +239,9 @@ resource "aws_security_group" "all_internal_allow" {
     Name = "all_internal_allow"
   }
 }
+
+# Outputs
+output "node1_ip_address" {
+  value = aws_instance.node1.public_ip
+  description = "The public IP address of the node1 server instance. Visit the IP address to see if Apache is running after terraform apply completes."
+}
