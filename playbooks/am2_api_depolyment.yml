@@ -7,7 +7,7 @@
   tasks:
   - name: pull the api image
     docker_image:
-      name: georgemicro/python-fastapi
+      name: georgemicro/python-fastapi:1.0.0
       source: pull
       state: present
     

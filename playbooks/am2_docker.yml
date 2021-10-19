@@ -20,7 +20,7 @@
       name: python-pip
       state: present
 
-  - name: Install docker-py with pip3
+  - name: Install docker-py with pip
     pip:
       name: docker-py
       # executable: /usr/bin/pip3
@@ -37,7 +37,7 @@
     shell: amazon-linux-extras install docker -y
     when: "'docker.service' not in services"
 
-  - name: Start Docker service
+  - name: Start and enable Docker service
     service:
       name: docker
       state: started
