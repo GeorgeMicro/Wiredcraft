@@ -16,4 +16,4 @@
       name: api_container1
       state: present
       ports: 3000:3000
-      image: georgemicro/python-fastapi
+      image: georgemicro/python-fastapi:1.0.0
