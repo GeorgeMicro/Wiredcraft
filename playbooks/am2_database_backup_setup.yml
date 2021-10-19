@@ -15,8 +15,8 @@
 
   - name: creata a dummy database
     mysql_db:
+      name: "{{ database_name }}"
       state: present
-      name: "{{ dummy_database }}"
 
   - name: mysql backup | create backup directory
     file:
