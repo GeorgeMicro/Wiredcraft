@@ -1,0 +1,44 @@
+---
+- name: Setup docker
+  hosts: linux
+  remote_user: ec2-user
+  become: yes
+
+  tasks:
+  - name: Remove the docker repo file
+    file:
+      path: /etc/yum.repos.d/docer-ce.repo
+      state: absent
+
+  - name: Install yum utils
+    yum:
+      name: yum-utils
+      state: latest
+
+  - name: Install python pip
+    yum:
+      name: python3-pip
+      state: present
+
+  - name: Install docker-py with pip3
+    pip:
+      name: docker-py
+      executable: /usr/bin/pip3
+      state: present
+
+  - name: Populate service facts
+    service_facts:
+
+  - debug:
+      msg: Docker installed!
+    when: "'docker.service' in services"  
+
+  - name: Install Docker Engine
+    shell: amazon-linux-extras install docker -y
+    when: "'docker.service' not in services"
+
+  - name: Start Docker service
+    service:
+      name: docker
+      state: started
+      enabled: yes

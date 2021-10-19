@@ -1,0 +1,17 @@
+---
+- name: inital setup of the app server
+  hosts: linux
+  remote_user: ec2-user
+  become: yes
+
+  tasks:
+  - name: Install EPEL Release
+    shell: "amazon-linux-extras install epel -y"
+
+  - name: Enable Python 3.8 repo
+    shell: "amazon-linux-extras enable python3.8"
+
+  - name: Install Python 3.8
+    yum:
+      name: python3.8
+      state: present

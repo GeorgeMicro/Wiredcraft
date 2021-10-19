@@ -1,0 +1,26 @@
+---
+- name: setup the database
+  hosts: linux
+  remote_user: ec2-user
+  become: yes
+
+  tasks:
+  - name: install postgres related packages
+    yum:
+      name: ['postgresql-10.17', 'postgresql-server-10.17']
+      state: present
+
+  - name: Find out if PostgreSQL is initialized
+    stat:
+        path: "/var/lib/pgsql/data/pg_hba.conf"
+    register: postgres_data
+
+  - name: initialize the database if it is not
+    shell: "postgresql-setup initdb"
+    when: not postgres_data.stat.exists
+
+  - name: make sure postgres is started and enabled
+    service:
+      name: postgresql
+      state: started
+      enabled: yes

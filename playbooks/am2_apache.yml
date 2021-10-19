@@ -1,0 +1,17 @@
+---
+- name: Install the webserver
+  hosts: linux
+  remote_user: ec2-user
+  become: yes
+
+  tasks: 
+  - name: Install Apache
+    yum:
+      name: httpd
+      state: latest
+
+  - name: Make sure Apache is running
+    service:
+      name: httpd
+      state: started
+      enabled: yes

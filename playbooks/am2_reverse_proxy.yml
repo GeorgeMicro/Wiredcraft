@@ -1,0 +1,44 @@
+---
+- name: Setup the reverse proxy
+  hosts: linux
+  remote_user: ec2-user
+  become: yes
+  
+  tasks:  
+  # - name: enable Apache mod_proxy 
+  #   blockinfile:
+  #     state: present
+  #     path: /etc/httpd/conf.modules.d/00-proxy.conf
+  #     block: |
+  #       LoadModule proxy_module modules/mod_proxy.so
+  #       LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
+  #       LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
+  #       LoadModule proxy_connect_module modules/mod_proxy_connect.so
+  #       LoadModule proxy_express_module modules/mod_proxy_express.so
+  #       LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so
+  #       LoadModule proxy_fdpass_module modules/mod_proxy_fdpass.so
+  #       LoadModule proxy_ftp_module modules/mod_proxy_ftp.so
+  #       LoadModule proxy_http_module modules/mod_proxy_http.so
+  #       LoadModule proxy_scgi_module modules/mod_proxy_scgi.so
+  #       LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+  
+  - name: setup the reverse proxy
+    blockinfile:
+      create: yes
+      state: present
+      path: /etc/httpd/conf.d/app.conf
+      block: |
+        <VirtualHost *:80>
+            ProxyPreserveHost On
+
+            ProxyPass / http://127.0.0.1:3000/
+            ProxyPassReverse / http://127.0.0.1:3000/
+        </VirtualHost>
+
+  # - name: allow outbound connection with SELinux
+  #   shell: "/usr/sbin/setsebool -P httpd_can_network_connect 1"
+
+  - name: restart apache
+    service:
+      name: httpd
+      state: restarted

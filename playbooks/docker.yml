@@ -1,5 +1,5 @@
 ---
-- name: setup docker
+- name: Setup docker
   hosts: linux
   remote_user: root
 
