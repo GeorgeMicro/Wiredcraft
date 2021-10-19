@@ -14,6 +14,6 @@
   - name: run a api container
     docker_container:
       name: api_container1
-      state: present
+      state: started
       ports: 3000:3000
       image: georgemicro/python-fastapi:1.0.0

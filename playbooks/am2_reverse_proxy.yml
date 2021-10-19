@@ -35,8 +35,8 @@
             ProxyPassReverse / http://127.0.0.1:3000/
         </VirtualHost>
 
-  - name: allow outbound connection with SELinux
-    shell: "/usr/sbin/setsebool -P httpd_can_network_connect 1"
+  # - name: allow outbound connection with SELinux (no need for AM2 since it is disabled by default)
+  #   shell: "/usr/sbin/setsebool -P httpd_can_network_connect 1"
 
   - name: restart apache
     service:
