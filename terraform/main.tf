@@ -244,4 +244,9 @@ resource "aws_security_group" "all_internal_allow" {
 output "node1_ip_address" {
   value = aws_instance.node1.public_ip
   description = "The public IP address of the node1 server instance. Visit the IP address to see if Apache is running after terraform apply completes."
+  depends_on = [
+    # Security group rule must be created before this IP address could
+    # actually be used, otherwise the services will be unreachable.
+    aws_security_group_rule.inbound_all_http_allow,
+  ]
 }
