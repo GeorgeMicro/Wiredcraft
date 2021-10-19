@@ -25,7 +25,7 @@
 
   - name: mysql backup | create backup directory
     file:
-      path: "/var/database_backup"
+      path: "/var/database_backups"
       recurse: true
       state: directory
       mode: 0755
@@ -34,7 +34,7 @@
     mysql_db:
       name: all
       state: dump
-      target: /var/database_backup.sql
+      target: /var/database_backups/database_backup.sql
   
   - name: schedule database backup
     cron:
