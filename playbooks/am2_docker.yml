@@ -37,6 +37,12 @@
     shell: amazon-linux-extras install docker -y
     when: "'docker.service' not in services"
 
+  - name: allow ec2-user to operate docker
+    user:
+      name: ec2-user
+      groups: docker
+      append: yes
+
   - name: Start and enable Docker service
     service:
       name: docker

@@ -5,22 +5,13 @@
   become: yes
 
   tasks:
-  - name: install postgres related packages
+  - name: Install mariadb
     yum:
-      name: ['postgresql-10.17', 'postgresql-server-10.17']
+      name: mariadb-server
       state: present
 
-  - name: Find out if PostgreSQL is initialized
-    stat:
-        path: "/var/lib/pgsql/data/pg_hba.conf"
-    register: postgres_data
-
-  - name: initialize the database if it is not
-    shell: "postgresql-setup initdb"
-    when: not postgres_data.stat.exists
-
-  - name: make sure postgres is started and enabled
+  - name: make sure mariadb is started and enabled
     service:
-      name: postgresql
+      name: mariadb
       state: started
       enabled: yes

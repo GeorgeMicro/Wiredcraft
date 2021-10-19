@@ -10,6 +10,12 @@
       name: httpd
       state: latest
 
+  - name: allow ec2-user to configure Apache
+    user:
+      name: ec2-user
+      groups: apache
+      append: yes
+
   - name: Make sure Apache is running
     service:
       name: httpd
