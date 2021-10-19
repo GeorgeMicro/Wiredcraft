@@ -1,0 +1,38 @@
+---
+- name: Setup regular database backup
+  hosts: linux
+  remote_user: ec2-user
+  become: yes
+  vars:
+    database_user: ec2-user
+    database_name: dummy_database
+
+  tasks:
+  - name: install mariadb client
+    yum:
+      pkg: mariadb
+      state: present
+
+  - name: creata a dummy database
+    mysql_db:
+      state: present
+      name: "{{ dummy_database }}"
+
+  - name: mysql backup | create backup directory
+    file:
+      path: "/var/database_backup"
+      recurse: true
+      state: directory
+      mode: 0755
+
+  - name: create a backup of the databases
+    mysql_db:
+      name: all
+      state: dump
+      target: /var/database_backup.sql
+  
+  - name: schedule database backup
+    cron:
+      name: backup all mysql databases
+      special_time: daliy      
+      job: "mysqldump -u {{ database_user }} --default-character-set=latin1 -p {{ database_name }}"
