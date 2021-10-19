@@ -21,3 +21,13 @@
       name: httpd
       state: started
       enabled: yes
+
+# need to find a way to get the 
+# - name: Verify that the Apache server is accessible
+#   hosts: localhost
+#   become: no
+#   tasks:
+#     - name: Connect to the Apache server web page
+#       uri:
+#         url: {{ ansible_host }}:80
+#         status_code: [200]

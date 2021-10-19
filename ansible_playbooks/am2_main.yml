@@ -1,0 +1,8 @@
+---
+- import_playbook: am2_init_setup.yml
+- import_playbook: am2_apache.yml
+- import_playbook: am2_database.yml
+- import_playbook: am2_docker.yml
+- import_playbook: am2_reverse_proxy.yml
+- import_playbook: am2_api_depolyment.yml
+- import_playbook: am2_database_backup_setup.yml
