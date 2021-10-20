@@ -6,8 +6,9 @@
 
   tasks:
   - name: Collect Repo Name  from yum repolist -v
-    shell: "yum repolist -v | grep Repo-name | awk -F\": \" '{print $2}'"
-    warn: false
+    shell: 
+      cmd: "yum repolist -v | grep Repo-name | awk -F\": \" '{print $2}'"
+      warn: false
     register: yum_reponame
   - debug:
       var: yum_reponame.stdout_lines
