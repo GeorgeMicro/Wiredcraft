@@ -79,9 +79,10 @@ Working directory: docker_api_app
 
 There are two APIs available:
 
-Read Root: GET	/
-
-Read Item: GET	/items/{item_id}
+| Name       | API                     | Example       |
+| ---------- | ----------------------- | ------------- |
+| Read Root  | GET	/                | GET /         |
+| Read Item: | GET	/items/{item_id} | GET /items/10 |
 
 For detailed the clean and interactive API documentations (made possible by Swagger UI and Redoc), please go to ''{server}/docs' or '{server}/redoc'.
 
