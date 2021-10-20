@@ -40,7 +40,7 @@ Ansible >= 2.9
 
 Python >= 2.7
 
-The created AWS bridge server by the terraform project should already be ready run the playbooks without any issues.
+The created AWS bridge server by the terraform project should already be ready to run the playbooks without any issues.
 
 Host Environment: Amazon Linux 2
 
@@ -79,8 +79,8 @@ Working directory: docker_api_app
 
 There are two APIs available:
 
-| Name       | API                     | Example       |
-| ---------- | ----------------------- | ------------- |
+| Name       | API                  | Example       |
+| ---------- | -------------------- | ------------- |
 | Read Root  | GET	/                | GET /         |
 | Read Item: | GET	/items/{item_id} | GET /items/10 |
 
