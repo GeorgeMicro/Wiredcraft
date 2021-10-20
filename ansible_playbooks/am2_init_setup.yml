@@ -7,6 +7,7 @@
   tasks:
   - name: Collect Repo Name  from yum repolist -v
     shell: "yum repolist -v | grep Repo-name | awk -F\": \" '{print $2}'"
+    warn: false
     register: yum_reponame
   - debug:
       var: yum_reponame.stdout_lines
@@ -18,7 +19,7 @@
   - name: Enable Python 3.8 repo
     shell: "amazon-linux-extras enable python3.8"
     when: "'Amazon Extras repo for python3.8' not in yum_reponame.stdout_lines"
-    
+
   - name: Install Python 3.8
     yum:
       name: python3.8
