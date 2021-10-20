@@ -10,7 +10,7 @@
       name: mariadb-server
       state: present
 
-  - name: make sure mariadb is started and enabled
+  - name: Ensure mariadb is started and enabled
     service:
       name: mariadb
       state: started

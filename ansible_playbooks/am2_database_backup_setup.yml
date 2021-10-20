@@ -8,12 +8,12 @@
     database_name: dummy_database
 
   tasks:
-  - name: install mariadb client
+  - name: Install mariadb client
     yum:
       pkg: mariadb
       state: present
 
-  - name: install PyMySQL
+  - name: Install PyMySQL
     pip:
       name: PyMySQL
       state: present

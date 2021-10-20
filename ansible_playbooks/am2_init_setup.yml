@@ -1,5 +1,5 @@
 ---
-- name: inital setup of the app server
+- name: Inital setup of the app server
   hosts: linux
   remote_user: ec2-user
   become: yes

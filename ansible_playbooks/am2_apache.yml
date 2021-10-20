@@ -10,7 +10,7 @@
       name: httpd
       state: latest
 
-  - name: allow ec2-user to configure Apache
+  - name: Allow ec2-user to configure Apache
     user:
       name: ec2-user
       groups: apache

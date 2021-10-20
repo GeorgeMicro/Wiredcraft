@@ -22,7 +22,7 @@
   #       LoadModule proxy_scgi_module modules/mod_proxy_scgi.so
   #       LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
   
-  - name: setup the reverse proxy
+  - name: Setup the reverse proxy
     blockinfile:
       create: yes
       state: present
