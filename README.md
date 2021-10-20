@@ -46,11 +46,10 @@ Host Environment: Amazon Linux 2
 
 ### Usage
 
-1. Edit your hosts and make sure your control server can connect the hosts via ssh
-
-2. Change your working directory to 'ansible_playbooks'
-
-3. run `ansible-playbook am2_main.yml`
+1. Create a section called [linux] and put your target hosts underneath
+2. make sure your control server can connect the hosts via ssh
+3. Change your working directory to 'ansible_playbooks'
+4. run `ansible-playbook am2_main.yml`
 
 
 
