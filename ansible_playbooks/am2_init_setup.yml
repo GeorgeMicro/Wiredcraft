@@ -7,16 +7,18 @@
   tasks:
   - name: Collect Repo Name  from yum repolist -v
     shell: "yum repolist -v | grep Repo-name | awk -F\": \" '{print $2}'"
-    register: echo_reponame
+    register: yum_reponame
   - debug:
-      var: echo_reponame.stdout_lines
-      
+      var: yum_reponame.stdout_lines
+
   - name: Install EPEL Release
     shell: "amazon-linux-extras install epel -y"
+    when: "'Amazon Extras repo for epel' not in yum_reponame.stdout_lines"
 
   - name: Enable Python 3.8 repo
     shell: "amazon-linux-extras enable python3.8"
-
+    when: "'Amazon Extras repo for python3.8' not in yum_reponame.stdout_lines"
+    
   - name: Install Python 3.8
     yum:
       name: python3.8
