@@ -5,6 +5,12 @@
   become: yes
 
   tasks:
+  - name: Collect Repo Name  from yum repolist -v
+    shell: "yum repolist -v | grep Repo-name | awk -F\": \" '{print $2}'"
+    register: echo_reponame
+  - debug:
+      var: echo_reponame.stdout_lines
+      
   - name: Install EPEL Release
     shell: "amazon-linux-extras install epel -y"
 

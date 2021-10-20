@@ -5,11 +5,6 @@
   become: yes
 
   tasks:
-  - name: Remove the docker repo file
-    file:
-      path: /etc/yum.repos.d/docer-ce.repo
-      state: absent
-
   - name: Install yum utils
     yum:
       name: yum-utils
