@@ -48,7 +48,9 @@ Host Environment: Amazon Linux 2
 
 1. Edit your hosts and make sure your control server can connect the hosts via ssh
 
-2. run `ansible-playbook am2_main.yml`
+2. Change your working directory to 'ansible_playbooks'
+
+3. run `ansible-playbook am2_main.yml`
 
 
 
@@ -59,7 +61,7 @@ This web app uses Fastapi. The app listens port 3000.
 
 A pre-built image is available at Docker hub: 
 
-*georgemicro/python-fastapi:1.0.0*
+[georgemicro/python-fastapi - Docker Image | Docker Hub](https://hub.docker.com/r/georgemicro/python-fastapi)
 
 ### Build a image
 
@@ -68,6 +70,8 @@ Working directory: docker_api_app
 `docker image build -t python-fastapi .`
 
 ### Run a container from image on Docker Hub
+
+`docker pull georgemicro/python-fastapi:1.0.0`
 
 `docker run -d -p {port}:3000 georgemicro/python-fastapi:1.0.0`
 
